@@ -12,8 +12,8 @@ namespace EFAutomation.Console
         static void Main(string[] args)
         {
             PocoClassService pocoClassService = new PocoClassService();
-            string classCode = pocoClassService.GetClassCode("dimProvider", @"C:\Projects\EFAutomation\EFAutomation.Services\Templates", "DM.ClaimTarget.DataLoader");
-           string c2 = classCode;
+            object classCode = pocoClassService.GetClassCode("ReleaseHistoryVersionLog", @"D:\_EFAutomation\EFAutomation.Services\Templates", "DM.ClaimDashboard.Model");
+            object c2 = classCode;
         }
     }
 }

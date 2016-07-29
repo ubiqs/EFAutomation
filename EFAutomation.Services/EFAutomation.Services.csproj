@@ -51,7 +51,9 @@
     <Compile Include="PocoClassService.cs" />
     <Compile Include="PropertyCSharp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyTS.cs" />
     <Compile Include="SQLServerCSharpDataTypeMappingService.cs" />
+    <Compile Include="SQLServerTypescriptDataTypeMappingService.cs" />
     <Compile Include="TemplateConstants.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Templates\PocoClassTemplate.txt" />
+    <Content Include="Templates\TypeScriptInterfaceTemplate.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EFAutomation.Model\EFAutomation.Model.csproj">

@@ -13,32 +13,44 @@ namespace EFAutomation.Services
     public class PocoClassService
     {
         private string TEMPLATE_NAME = "PocoClassTemplate.txt";
-        public string GetClassCode(string tableName, string templatePath, string nameSpace)
+        private string TEMPLATE_NAME_TS = "TypeScriptInterfaceTemplate.txt";
+
+        public object GetClassCode(string tableName, string templatePath, string nameSpace)
         {
             List<DatabaseColumn> databaseColumns = null;
             string fullTemplatePath = Path.Combine(templatePath, TEMPLATE_NAME);
+            string fullTemplatePath_TS = Path.Combine(templatePath, TEMPLATE_NAME_TS);
 
             databaseColumns = LoadDatabaseColumns(tableName);
 
             string pocoClassTemplate = LoadTemplate(fullTemplatePath);
+            string typeScriptInterfaceTemplate = LoadTemplate(fullTemplatePath_TS);
+
             string properties = string.Empty;
-            foreach(var column in databaseColumns)
+            string propertiesTypeScript = string.Empty;
+
+
+            foreach (var column in databaseColumns)
             {
                 properties += new PropertyCSharp(column.Name, SQLServerCSharpDataTypeMappingService.GetCSharpType(column.DataType, column.IsNullable)).ToString() + Environment.NewLine;
+                propertiesTypeScript += new PropertyTS(column.Name, SQLServerTypescriptDataTypeMappingService.GetCSharpType(column.DataType, column.IsNullable)).ToString() + Environment.NewLine;
             }
 
             pocoClassTemplate = pocoClassTemplate.Replace(TemplateConstants.ClassName, tableName);
             pocoClassTemplate = pocoClassTemplate.Replace(TemplateConstants.Namespace, nameSpace);
             pocoClassTemplate = pocoClassTemplate.Replace(TemplateConstants.Properties, properties);
 
-            return pocoClassTemplate;
+            typeScriptInterfaceTemplate = typeScriptInterfaceTemplate.Replace(TemplateConstants.ClassName, tableName);
+            typeScriptInterfaceTemplate = typeScriptInterfaceTemplate.Replace(TemplateConstants.Properties, propertiesTypeScript);
+
+            return new { ClassTemplate = pocoClassTemplate, TypeScriptInterfaceTemplate = typeScriptInterfaceTemplate };
         }
 
         private string LoadTemplate(string fullTemplatePath)
         {
             using (FileStream stream = new FileStream(fullTemplatePath, FileMode.Open))
             {
-                using(StreamReader reader = new StreamReader(stream))
+                using (StreamReader reader = new StreamReader(stream))
                 {
                     return reader.ReadToEnd();
                 }
@@ -52,10 +64,7 @@ namespace EFAutomation.Services
                 using (ObjectContext objectContext = ((IObjectContextAdapter)context).ObjectContext)
                 {
                     //objectContext.Connection.Open();
-
-
-                     return objectContext
-                        .ExecuteStoreQuery<DatabaseColumn>(string.Format(@"SELECT 
+                    string query = string.Format(@"SELECT 
                                                                 c.name Name,
                                                                 t.Name DataType,
                                                                 c.max_length 'Max Length',
@@ -73,13 +82,16 @@ namespace EFAutomation.Services
                                                                 sys.indexes i ON ic.object_id = i.object_id AND ic.index_id = i.index_id
                                                             WHERE
                                                                 c.object_id = OBJECT_ID('{0}')
-                                                             Order By IsPrimaryKey Desc", tableName)).ToList();
+                                                             Order By IsPrimaryKey Desc", tableName);
+
+                    return objectContext
+                       .ExecuteStoreQuery<DatabaseColumn>(query).ToList();
 
 
                 }
 
             }
-            
+
         }
     }
 }
