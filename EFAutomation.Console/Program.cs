@@ -12,7 +12,7 @@ namespace EFAutomation.Console
         static void Main(string[] args)
         {
             PocoClassService pocoClassService = new PocoClassService();
-            object classCode = pocoClassService.GetClassCode("ReleaseHistoryVersionLog", @"D:\_EFAutomation\EFAutomation.Services\Templates", "DM.ClaimDashboard.Model");
+            object classCode = pocoClassService.GetClassCode("Grid_Errors", @"C:\_Code\_EFAutomation\EFAutomation.Services\Templates", "DM.ConfigAuditor.Model.ViewModel");
             object c2 = classCode;
         }
     }
