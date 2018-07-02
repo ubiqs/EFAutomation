@@ -32,7 +32,7 @@ namespace EFAutomation.Services
 
             foreach (var column in databaseColumns)
             {
-                properties += new PropertyCSharp(column.Name, SQLServerCSharpDataTypeMappingService.GetCSharpType(column.DataType, column.IsNullable)).ToString() + Environment.NewLine;
+                properties += new PropertyCSharp(column.Name, SQLServerCSharpDataTypeMappingService.GetCSharpType(column.DataType, column.IsNullable), column.IsPrimaryKey).ToString() + Environment.NewLine;
                 propertiesTypeScript += new PropertyTS(column.Name, SQLServerTypescriptDataTypeMappingService.GetCSharpType(column.DataType, column.IsNullable)).ToString() + Environment.NewLine;
             }
 

@@ -1,3 +1,3 @@
-﻿interface {{ClassName}} {
+﻿export class {{ClassName}} {
     {{Properties}}
 }
